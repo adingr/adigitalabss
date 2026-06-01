@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 Creator Starter Kit — @adigitalabs</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: rgba(255,255,255,0.07);
+    --accent: #ff6b2b;
+    --accent2: #ffb347;
+    --accent3: #7c3aed;
+    --text: #f0ede8;
+    --muted: #6b6880;
+    --green: #22c55e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* HERO GLOW */
+  .hero-glow {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(255,107,43,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    padding: 48px 0 0;
+    text-align: center;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,107,43,0.12);
+    border: 1px solid rgba(255,107,43,0.25);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  .badge::before { content: '🚀'; font-size: 14px; }
+
+  h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(24px, 5vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 500px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 48px;
+  }
+
+  .header-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ===== NAV TABLE ===== */
+  .nav-section {
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .section-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .nav-grid {
+    display: grid;
+    gap: 2px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    padding: 16px 20px;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .nav-item:hover { background: var(--surface2); }
+
+  .nav-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255,107,43,0.1);
+    border: 1px solid rgba(255,107,43,0.2);
+    color: var(--accent);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-emoji { font-size: 18px; flex-shrink: 0; }
+
+  .nav-info strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .nav-info span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ===== MODULE SECTIONS ===== */
+  .module {
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .module-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .module-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255,107,43,0.2), rgba(124,58,237,0.2));
+    border: 1px solid rgba(255,107,43,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .module-header h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .module-header .mod-num {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  /* ===== TABLE ===== */
+  .tbl-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead tr {
+    background: var(--surface2);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tbody tr { background: var(--surface); }
+  tbody tr:hover { background: var(--surface2); }
+
+  /* ===== CHECKLIST ===== */
+  .checklist {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .checklist li:hover { border-color: rgba(255,107,43,0.3); }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,107,43,0.4);
+    flex-shrink: 0;
+    margin-top: 1px;
+    background: rgba(255,107,43,0.05);
+  }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    background: rgba(255,107,43,0.06);
+    border: 1px solid rgba(255,107,43,0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .callout.green {
+    background: rgba(34,197,94,0.06);
+    border-color: rgba(34,197,94,0.2);
+    border-left-color: var(--green);
+  }
+
+  .callout.purple {
+    background: rgba(124,58,237,0.06);
+    border-color: rgba(124,58,237,0.2);
+    border-left-color: var(--accent3);
+  }
+
+  /* ===== CODE BLOCK ===== */
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin-bottom: 12px;
+  }
+
+  .code-block .kw { color: #ff79c6; }
+  .code-block .str { color: #f1fa8c; }
+  .code-block .cm { color: #6272a4; }
+  .code-block .fn { color: #50fa7b; }
+  .code-block .arrow { color: var(--accent2); }
+
+  /* ===== STARS ===== */
+  .stars { color: #fbbf24; }
+
+  /* ===== WEEK GRID ===== */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .day-card .day-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .day-card .day-content {
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .day-card.carousel { border-top: 2px solid var(--accent); }
+  .day-card.reels { border-top: 2px solid var(--accent3); }
+  .day-card.photo { border-top: 2px solid var(--green); }
+  .day-card.off { border-top: 2px solid var(--muted); opacity: 0.5; }
+
+  /* ===== PROMPT MINING ===== */
+  .prompt-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .prompt-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 14px;
+  }
+
+  .prompt-q {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ===== MONETISASI CARDS ===== */
+  .mono-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .mono-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .mono-card h4 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .mono-card .price {
+    font-size: 12px;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .mono-card .when {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ===== TOOLS GRID ===== */
+  .tools-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  .tool-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .tool-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .tool-info strong { display: block; font-size: 14px; font-weight: 500; }
+  .tool-info span { font-size: 12px; color: var(--muted); }
+
+  /* ===== CTA SECTION ===== */
+  .cta-section {
+    margin: 48px 0;
+    text-align: center;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(255,107,43,0.1) 0%, rgba(124,58,237,0.1) 100%);
+    border: 1px solid rgba(255,107,43,0.25);
+    border-radius: 24px;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(255,107,43,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-badge {
+    display: inline-block;
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+
+  .cta-box h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .cta-box p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    line-height: 1.7;
+  }
+
+  .cta-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .cta-feat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .cta-feat .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--accent) 0%, #e85520 100%);
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 16px 36px;
+    border-radius: 100px;
+    transition: all 0.3s;
+    box-shadow: 0 8px 32px rgba(255,107,43,0.3);
+    letter-spacing: -0.01em;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255,107,43,0.4);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-arrow { font-size: 18px; transition: transform 0.3s; }
+  .btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+  .cta-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 40px 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 32px 0 48px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .mono-grid { grid-template-columns: 1fr; }
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+    .cta-box { padding: 28px 20px; }
+    .btn-primary { font-size: 15px; padding: 14px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero-glow"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">Free Resource dari @adigitalabs</div>
+    <h1>Creator Starter Kit<br><span>Dari Nol Sampai Cuan</span></h1>
+    <p class="subtitle">Semua yang lu butuhkan untuk mulai ngonten dari nol sampai bisa menghasilkan uang — dikemas dalam satu tempat.</p>
+    <div class="header-meta">
+      <span>📚 9 Modul Lengkap</span>
+      <span>⚡ Langsung bisa dipraktekkan</span>
+      <span>💰 Total biaya: Rp 0</span>
+    </div>
+  </div>
+
+  <!-- NAVIGASI -->
+  <div class="nav-section">
+    <div class="section-label">Navigasi</div>
+    <div class="nav-grid">
+      <a href="#m1" class="nav-item">
+        <div class="nav-num">1</div>
+        <div class="nav-emoji">🧠</div>
+        <div class="nav-info">
+          <strong>Mindset Check</strong>
+          <span>Reset cara pikir sebelum mulai</span>
+        </div>
+      </a>
+      <a href="#m2" class="nav-item">
+        <div class="nav-num">2</div>
+        <div class="nav-emoji">🎯</div>
+        <div class="nav-info">
+          <strong>Niche & Audiens</strong>
+          <span>Template tentukan niche + audiens spesifik</span>
+        </div>
+      </a>
+      <a href="#m3" class="nav-item">
+        <div class="nav-num">3</div>
+        <div class="nav-emoji">📱</div>
+        <div class="nav-info">
+          <strong>Format Konten</strong>
+          <span>Panduan pilih format terbaik untuk lu</span>
+        </div>
+      </a>
+      <a href="#m4" class="nav-item">
+        <div class="nav-num">4</div>
+        <div class="nav-emoji">📝</div>
+        <div class="nav-info">
+          <strong>Hook & Caption</strong>
+          <span>10 formula hook + 7 teknik caption</span>
+        </div>
+      </a>
+      <a href="#m5" class="nav-item">
+        <div class="nav-num">5</div>
+        <div class="nav-emoji">⚙️</div>
+        <div class="nav-info">
+          <strong>Sistem Konten</strong>
+          <span>Content calendar + rutinitas mingguan</span>
+        </div>
+      </a>
+      <a href="#m6" class="nav-item">
+        <div class="nav-num">6</div>
+        <div class="nav-emoji">💡</div>
+        <div class="nav-info">
+          <strong>Content Bank</strong>
+          <span>Gudang ide yang gak pernah habis</span>
+        </div>
+      </a>
+      <a href="#m7" class="nav-item">
+        <div class="nav-num">7</div>
+        <div class="nav-emoji">📊</div>
+        <div class="nav-info">
+          <strong>Algoritma</strong>
+          <span>5 sinyal yang harus lu pahami</span>
+        </div>
+      </a>
+      <a href="#m8" class="nav-item">
+        <div class="nav-num">8</div>
+        <div class="nav-emoji">💰</div>
+        <div class="nav-info">
+          <strong>Monetisasi</strong>
+          <span>Roadmap cuan pertama dari konten</span>
+        </div>
+      </a>
+      <a href="#m9" class="nav-item">
+        <div class="nav-num">9</div>
+        <div class="nav-emoji">🛠️</div>
+        <div class="nav-info">
+          <strong>Tools Gratis</strong>
+          <span>Semua tools gratis yang lu butuhkan</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 1: MINDSET -->
+  <div class="module reveal" id="m1">
+    <div class="module-header">
+      <div class="module-icon">🧠</div>
+      <div>
+        <div class="mod-num">Modul 1</div>
+        <h2>Mindset Check</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Buang 3 Mindset Ini Sekarang</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Mindset Lama</th><th>Ganti Dengan</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>"Nunggu sempurna dulu"</td><td>"Konten pertama tugasnya cuma satu: ada"</td></tr>
+            <tr><td>"Harus punya kamera bagus"</td><td>"HP yang lu pegang sekarang sudah cukup"</td></tr>
+            <tr><td>"Takut dihakimi orang"</td><td>"100 konten pertama hampir gak ada yang nonton"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✏️ Tugas Pertama Lu</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div>Tulis 3 alasan yang selama ini bikin lu nunda mulai ngonten</li>
+        <li><div class="check-box"></div>Di sebelahnya, tulis: "Ini valid atau cuma excuse?"</li>
+        <li><div class="check-box"></div>Commit untuk gak pakai alasan itu lagi</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 2: NICHE -->
+  <div class="module reveal" id="m2">
+    <div class="module-header">
+      <div class="module-icon">🎯</div>
+      <div>
+        <div class="mod-num">Modul 2</div>
+        <h2>Niche & Audiens</h2>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <span class="cm">// Formula Tentukan Niche</span><br>
+      <span class="fn">Apa yang lu tau</span> <span class="arrow">+</span> <span class="fn">Siapa yang lu bantu</span> <span class="arrow">+</span> <span class="fn">Masalah yang lu selesaikan</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Template Audiens — Isi Sekarang</div>
+      <div class="callout">
+        <strong>Formula:</strong><br>
+        "Aku bantu [siapa] yang [kondisi/masalah] untuk [hasil yang diinginkan] tanpa [hambatan yang mereka pikir]."
+      </div>
+      <div class="callout green">
+        <strong>Contoh:</strong><br>
+        "Aku bantu pemula 18–25 tahun yang mau mulai ngonten tapi bingung dari mana, untuk bisa posting konten pertama dan hasilkan cuan dari sana, tanpa harus punya kamera mahal atau ribuan followers dulu."
+      </div>
+      <div class="callout purple">
+        <strong>Punya lu:</strong><br>
+        Aku bantu _ yang _ untuk _ tanpa _.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✅ Ciri Niche yang Kuat</div>
+      <ul class="checklist">
+        <li><div class="check-box"></div>Audiens-nya spesifik (bukan "semua orang")</li>
+        <li><div class="check-box"></div>Pain point-nya jelas dan bisa dirasakan</li>
+        <li><div class="check-box"></div>Lu punya pengalaman atau pengetahuan di area ini</li>
+        <li><div class="check-box"></div>Ada orang yang mau bayar untuk solusinya</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 3: FORMAT -->
+  <div class="module reveal" id="m3">
+    <div class="module-header">
+      <div class="module-icon">📱</div>
+      <div>
+        <div class="mod-num">Modul 3</div>
+        <h2>Format Konten</h2>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Format</th><th>Terbaik Untuk</th><th>Effort</th><th>Save Rate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Reels (text overlay)</td><td>Jangkauan luas, akun baru</td><td>Sedang</td><td>Tinggi</td></tr>
+          <tr><td>Carousel</td><td>Edukasi mendalam, how-to</td><td>Rendah–Sedang</td><td>Sangat Tinggi</td></tr>
+          <tr><td>Photo + Caption</td><td>Storytelling, koneksi personal</td><td>Rendah</td><td>Sedang</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      📌 <strong>Aturan untuk Pemula:</strong> Pilih SATU format dulu. Kuasai minimal 30 hari. Baru ekspansi.
+    </div>
+
+    <div class="card" style="border: 1px dashed rgba(255,107,43,0.3);">
+      <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Komitmen lu:</div>
+      <div style="font-size: 15px;">Format pilihan gua: <span style="color: var(--accent);">_______________</span></div>
+      <div style="font-size: 15px; margin-top: 6px;">Alasan: <span style="color: var(--accent);">_______________</span></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 4: HOOK & CAPTION -->
+  <div class="module reveal" id="m4">
+    <div class="module-header">
+      <div class="module-icon">📝</div>
+      <div>
+        <div class="mod-num">Modul 4</div>
+        <h2>Hook & Caption</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">10 Formula Hook — Referensi Cepat</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Tipe</th><th>Formula</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Curiosity Gap</td><td>"Gak akan ada yang kasih tau lu ini — tapi gua bakal."</td></tr>
+            <tr><td>2</td><td>Direct Call-Out</td><td>"Lu yang [kondisi spesifik] — dengerin ini."</td></tr>
+            <tr><td>3</td><td>Counterintuitive</td><td>"Jangan [sesuatu yang dianggap benar]. Ini alasannya."</td></tr>
+            <tr><td>4</td><td>Angka Spesifik</td><td>"[N] hal yang [outcome kuat] untuk [audiens]."</td></tr>
+            <tr><td>5</td><td>Before & After</td><td>"Dulu [kondisi awal]. Sekarang [kondisi sesudah]."</td></tr>
+            <tr><td>6</td><td>Confession</td><td>"Gua [aksi mengejutkan]. Dan ini yang terjadi."</td></tr>
+            <tr><td>7</td><td>Validasi + Flip</td><td>"Gapapa [validasi]. Tapi [flip perspektif]."</td></tr>
+            <tr><td>8</td><td>Warning</td><td>"Stop [aksi] sebelum lu [konsekuensi negatif]."</td></tr>
+            <tr><td>9</td><td>Pertanyaan Retoris</td><td>"Kenapa [kondisi membingungkan]? Ini jawabannya."</td></tr>
+            <tr><td>10</td><td>POV</td><td>"POV: Lu [kondisi spesifik yang relate]."</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">7 Teknik Caption — Kapan Pakainya</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Teknik</th><th>Terbaik Untuk</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>PASTOR</strong></td><td>Konten edukatif + ada CTA/produk</td></tr>
+            <tr><td><strong>Storytelling 3 Act</strong></td><td>Konten personal, comeback story</td></tr>
+            <tr><td><strong>Listicle</strong></td><td>Tips, how-to, resource list</td></tr>
+            <tr><td><strong>Open Loop</strong></td><td>Konten panjang, mau max completion rate</td></tr>
+            <tr><td><strong>Empathy Mirror</strong></td><td>Audiens lagi struggle, mau koneksi emosional</td></tr>
+            <tr><td><strong>Controversial Take</strong></td><td>Mau viral lewat komentar</td></tr>
+            <tr><td><strong>Mini Tutorial</strong></td><td>Step-by-step yang bisa langsung dipraktekkan</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 5: SISTEM -->
+  <div class="module reveal" id="m5">
+    <div class="module-header">
+      <div class="module-icon">⚙️</div>
+      <div>
+        <div class="mod-num">Modul 5</div>
+        <h2>Sistem Konten</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Rutinitas Mingguan</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Hari</th><th>Aktivitas</th><th>Durasi</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Senin</td><td>Planning — isi content calendar minggu depan</td><td>15 menit</td></tr>
+            <tr><td>Sabtu/Minggu</td><td>Produksi — buat semua konten sekaligus</td><td>2–3 jam</td></tr>
+            <tr><td>Akhir bulan</td><td>Evaluasi — analisis performa & adjust</td><td>30 menit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Rotation Format Mingguan</div>
+      <div class="week-grid">
+        <div class="day-card carousel"><div class="day-name">Sen</div><div class="day-content">Carousel Edukatif</div></div>
+        <div class="day-card reels"><div class="day-name">Sel</div><div class="day-content">Reels Hook + Mindset</div></div>
+        <div class="day-card photo"><div class="day-name">Rab</div><div class="day-content">Photo + Caption Personal</div></div>
+        <div class="day-card carousel"><div class="day-name">Kam</div><div class="day-content">Carousel How-To</div></div>
+        <div class="day-card reels"><div class="day-name">Jum</div><div class="day-content">Reels Motivasi</div></div>
+        <div class="day-card photo"><div class="day-name">Sab</div><div class="day-content">Photo + Caption BTS</div></div>
+        <div class="day-card off"><div class="day-name">Min</div><div class="day-content">OFF / Stories</div></div>
+      </div>
+      <div class="callout">
+        🕔 <strong>Jam Posting Terbaik:</strong> 17:00 WIB dan 20:00 WIB — konsisten setiap hari
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 6: CONTENT BANK -->
+  <div class="module reveal" id="m6">
+    <div class="module-header">
+      <div class="module-icon">💡</div>
+      <div>
+        <div class="mod-num">Modul 6</div>
+        <h2>Content Bank</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Framework A-R-E</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Sumber</th><th>Cara Mining Ide</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>A — Audiens</strong></td><td>Cek komentar + DM — setiap pertanyaan = 1 ide</td></tr>
+            <tr><td><strong>R — Riset</strong></td><td>Scroll Explore, filter niche lu, remix dengan angle sendiri</td></tr>
+            <tr><td><strong>E — Experience</strong></td><td>Refleksi mingguan — belajar apa, gagal apa, beda apa</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Prompt Mining Ide — Pakai Tiap Sesi</div>
+      <div class="prompt-list">
+        <div class="prompt-item"><span class="prompt-q">→</span>Minggu ini gua belajar apa?</div>
+        <div class="prompt-item"><span class="prompt-q">→</span>Kesalahan apa yang baru gua sadari?</div>
+        <div class="prompt-item"><span class="prompt-q">→</span>Pertanyaan apa yang paling sering masuk di DM?</div>
+        <div class="prompt-item"><span class="prompt-q">→</span>Apa yang gua lakuin beda dari kebanyakan orang?</div>
+      </div>
+      <div class="callout" style="margin-top: 12px; margin-bottom: 0;">
+        🎯 Target: 10 ide per sesi 30 menit. Konsisten 4 minggu = <strong>40+ ide siap pakai.</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 7: ALGORITMA -->
+  <div class="module reveal" id="m7">
+    <div class="module-header">
+      <div class="module-icon">📊</div>
+      <div>
+        <div class="mod-num">Modul 7</div>
+        <h2>Algoritma</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">5 Sinyal yang Dibaca Algoritma</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Sinyal</th><th>Bobot</th><th>Cara Optimasi</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Watch Time / Completion Rate</td><td><span class="stars">★★★</span></td><td>Hook kuat di 3 detik pertama</td></tr>
+            <tr><td>Save Rate</td><td><span class="stars">★★★</span></td><td>Konten yang worth dibuka lagi</td></tr>
+            <tr><td>Share</td><td><span class="stars">★★★</span></td><td>Konten yang orang mau kirim ke temannya</td></tr>
+            <tr><td>Komentar</td><td><span class="stars">★★</span></td><td>Ajukan pertanyaan di caption/pinned comment</td></tr>
+            <tr><td>Like</td><td><span class="stars">★</span></td><td>Paling rendah bobotnya</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout">
+      🔒 <strong>Golden Window:</strong> Balas semua komentar dalam 60 menit pertama setelah posting. Ini sinyal engagement ganda ke algoritma di jam paling krusial.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 8: MONETISASI -->
+  <div class="module reveal" id="m8">
+    <div class="module-header">
+      <div class="module-icon">💰</div>
+      <div>
+        <div class="mod-num">Modul 8</div>
+        <h2>Monetisasi</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">4 Model untuk Pemula</div>
+      <div class="mono-grid">
+        <div class="mono-card">
+          <h4>📦 Produk Digital</h4>
+          <div class="price">Rp 29K–299K</div>
+          <div class="when">Mulai dari followers 100</div>
+        </div>
+        <div class="mono-card">
+          <h4>🎓 Jasa / Coaching</h4>
+          <div class="price">Rp 199K–999K/sesi</div>
+          <div class="when">Mulai dari followers 100</div>
+        </div>
+        <div class="mono-card">
+          <h4>🔗 Affiliate Marketing</h4>
+          <div class="price">5–30% per sale</div>
+          <div class="when">Kapan saja</div>
+        </div>
+        <div class="mono-card">
+          <h4>👥 Komunitas Berbayar</h4>
+          <div class="price">Rp 49K–199K/bulan</div>
+          <div class="when">Mulai dari followers 500+</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Roadmap Realistis</div>
+      <div class="code-block">
+        <span class="kw">Bulan 1–2</span> <span class="arrow">→</span> <span class="str">Bangun konten & trust. Belum fokus jual.</span><br>
+        <span class="kw">Bulan 3</span>   <span class="arrow">→</span> <span class="str">Launch produk digital pertama.</span><br>
+        <span class="kw">Bulan 4–5</span> <span class="arrow">→</span> <span class="str">Tambah coaching + affiliate.</span><br>
+        <span class="kw">Bulan 6+</span>  <span class="arrow">→</span> <span class="str">Launch komunitas / membership.</span>
+      </div>
+    </div>
+
+    <div class="callout green">
+      💡 <strong>Rumus Konten untuk Monetisasi:</strong> 80% value gratis di konten, 20% tawarin produk/jasa sebagai next step.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MODULE 9: TOOLS -->
+  <div class="module reveal" id="m9">
+    <div class="module-header">
+      <div class="module-icon">🛠️</div>
+      <div>
+        <div class="mod-num">Modul 9</div>
+        <h2>Tools Gratis yang Lu Butuhkan</h2>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-item">
+        <div class="tool-icon">🎬</div>
+        <div class="tool-info">
+          <strong>CapCut</strong>
+          <span>Edit video Reels — iOS / Android / PC</span>
+        </div>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">🎨</div>
+        <div class="tool-info">
+          <strong>Canva</strong>
+          <span>Desain carousel — iOS / Android / Web</span>
+        </div>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">📋</div>
+        <div class="tool-info">
+          <strong>Notion</strong>
+          <span>Content calendar — iOS / Android / Web</span>
+        </div>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-info">
+          <strong>ChatGPT / Claude</strong>
+          <span>Brainstorm + caption — Web / iOS</span>
+        </div>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">📈</div>
+        <div class="tool-info">
+          <strong>Instagram Insights</strong>
+          <span>Analytics — Bawaan Instagram</span>
+        </div>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">🛒</div>
+        <div class="tool-info">
+          <strong>Lynk.id</strong>
+          <span>Jual produk digital — Web</span>
+        </div>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">📌</div>
+        <div class="tool-info">
+          <strong>Pinterest</strong>
+          <span>Simpan referensi — iOS / Android</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green" style="margin-top: 16px;">
+      ✅ Total biaya: <strong>Rp 0.</strong> Semua free plan-nya sudah lebih dari cukup untuk mulai.
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FIRST WEEK CHECKLIST -->
+  <div class="module reveal">
+    <div class="module-header">
+      <div class="module-icon">✅</div>
+      <div>
+        <h2>First Week Checklist</h2>
+      </div>
+    </div>
+    <ul class="checklist">
+      <li><div class="check-box"></div>Isi template audiens (Modul 2)</li>
+      <li><div class="check-box"></div>Pilih 1 format konten (Modul 3)</li>
+      <li><div class="check-box"></div>Tulis 3 ide konten pertama</li>
+      <li><div class="check-box"></div>Pilih 1 hook formula dan tulis hook untuk konten pertama</li>
+      <li><div class="check-box"></div>Setup Notion content bank</li>
+      <li><div class="check-box"></div>Buat konten pertama — jelek pun gak apa-apa</li>
+      <li><div class="check-box"></div>Upload dan posting</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PROBLEM BRIDGE -->
+  <div class="reveal" style="margin-bottom: 48px;">
+    <div class="section-label">Satu Hal Lagi</div>
+
+    <div style="
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      position: relative;
+      overflow: hidden;
+    ">
+      <!-- subtle glow -->
+      <div style="
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, rgba(255,107,43,0.08) 0%, transparent 70%);
+        pointer-events: none;
+      "></div>
+
+      <div style="
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 16px;
+      ">💬 Tapi gua tau masalah terbesar lu setelah baca ini...</div>
+
+      <p style="
+        font-size: 17px;
+        line-height: 1.8;
+        color: var(--text);
+        margin-bottom: 20px;
+      ">Lu pasti bingung pas mau buka aplikasi notes HP:</p>
+
+      <!-- Quote block -->
+      <div style="
+        background: rgba(255,107,43,0.06);
+        border-left: 3px solid var(--accent);
+        border-radius: 0 12px 12px 0;
+        padding: 18px 20px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 1.8;
+        font-style: italic;
+        color: var(--text);
+      ">
+        "Aduh, kalimat pertama video gua <strong>(Hook)</strong> harus nulis apa ya?<br>
+        Terus di caption gua harus ngetik apa biar orang mau baca?"
+      </div>
+
+      <p style="font-size: 16px; line-height: 1.8; color: var(--muted);">
+        Akhirnya, lu malah <strong style="color: var(--text);">overthinking lagi</strong>, tutup HP, dan gak jadi upload.
+      </p>
+    </div>
+  </div>
+
+  <!-- CTA SECTION -->
+  <div class="cta-section reveal">
+    <div class="cta-box">
+      <div class="cta-badge">✦ Solusinya Simpel</div>
+
+      <h3 style="margin-bottom: 16px;">Gak usah pusing<br>mikir kalimat dari nol.</h3>
+
+      <p style="font-size: 17px; margin-bottom: 8px; color: var(--text); font-weight: 500;">
+        Biar gua yang siapin — lu tinggal copas.
+      </p>
+
+      <p style="margin-bottom: 28px;">
+        Gua udah nulis <strong>Hook & Caption Swipe File</strong> berisi template siap pakai
+        yang biasa gua gunain sendiri. Lu tinggal fokus rekam video pakai HP —
+        kalimat pemikatnya tinggal lu contek. Gak perlu pusing mikir berjam-jam lagi.
+      </p>
+
+      <!-- Price block -->
+      <div style="
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 20px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        justify-content: center;
+      ">
+        <div style="text-align: left;">
+          <div style="font-size: 12px; color: var(--muted); margin-bottom: 2px;">Harga</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent);">Rp 29.000</div>
+        </div>
+        <div style="width: 1px; height: 40px; background: var(--border);"></div>
+        <div style="font-size: 14px; color: var(--muted); text-align: left; max-width: 200px; line-height: 1.5;">
+          Seharga sebungkus rokok<br>atau segelas kopi ☕
+        </div>
+      </div>
+
+      <div style="
+        font-size: 13px;
+        color: var(--muted);
+        max-width: 420px;
+        margin: 0 auto 28px;
+        line-height: 1.7;
+        font-style: italic;
+      ">
+        "Harganya sengaja gua bikin sangat murah karena niat gua cuma satu — bantu lu cepet melangkah dan bisa dapet penghasilan tambahan dari ngonten."
+      </div>
+
+      <a href="http://lynk.id/adingrh14/2zgkmz2920z1/checkout" target="_blank" class="btn-primary">
+        Ambil Swipe File di Sini
+        <span class="btn-arrow">→</span>
+      </a>
+
+      <div class="cta-note" style="margin-top: 16px;">🔒 Pembayaran aman via Lynk.id · Akses langsung setelah bayar</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Dibuat dengan ❤️ oleh <a href="https://instagram.com/adigitalabs" target="_blank">@adigitalabs</a></p>
+    <p style="margin-top: 8px;">Bookmark halaman ini dan buka setiap kali lu butuh panduan.</p>
+  </div>
+
+</div>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Checklist interactive
+  document.querySelectorAll('.check-box').forEach(box => {
+    box.addEventListener('click', () => {
+      box.style.background = box.style.background === 'rgb(255, 107, 43)' ? 
+        'rgba(255,107,43,0.05)' : 'rgb(255, 107, 43)';
+      box.style.borderColor = box.style.background === 'rgb(255, 107, 43)' ? 
+        'var(--accent)' : 'rgba(255,107,43,0.4)';
+    });
+  });
+</script>
+
+</body>
+</html>
